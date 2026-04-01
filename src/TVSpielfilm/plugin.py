@@ -726,17 +726,19 @@ class TVfullscreen(TVscreenHelper, Screen):
 		<widget source="typeText3" render="Label" position="930,566" size="320,26" font="Regular;18" backgroundColor="#16000000" transparent="1" />
 		<widget source="typeText4" render="Label" position="930,592" size="320,26" font="Regular;18" backgroundColor="#16000000" transparent="1" />
 		<widget source="typeText5" render="Label" position="930,618" size="320,26" font="Regular;18" backgroundColor="#16000000" transparent="1" />
-		<eLabel name="button_green" position="10,660" size="6,36" zPosition="1" backgroundColor="#00006600,#0024a424,vertical" />
-		<eLabel name="button_yellow" position="186,660" size="6,36" backgroundColor="#007a6213,#00e6c619,vertical" zPosition="1" />
+		<eLabel name="button_red" position="10,660" size="6,36" backgroundColor="#00821c17,#00fe0000,vertical" zPosition="1" />
+		<eLabel name="button_green" position="150,660" size="6,36" backgroundColor="#00006600,#0024a424,vertical" zPosition="1" />
+		<eLabel name="button_yellow" position="256,660" size="6,36" backgroundColor="#007a6213,#00e6c619,vertical" zPosition="1" />
 		<eLabel name="button_blue" position="362,660" size="6,36" backgroundColor="#101093,#4040ff,vertical" zPosition="1" />
-		<widget source="key_green" render="Label" position="20,666" size="160,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
-		<widget source="key_yellow" render="Label" position="196,666" size="150,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
-		<widget source="key_blue" render="Label" position="372,666" size="150,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
-		<widget source="key_info" render="Label" position="960,666" size="120,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
+		<widget source="key_red" render="Label" position="20,666" size="130,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
+		<widget source="key_green" render="Label" position="160,666" size="96,26" font="Regular;18" valign="center" halign="left" wrap="ellipsis" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
+		<widget source="key_yellow" render="Label" position="266,666" size="96,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
+		<widget source="key_blue" render="Label" position="372,666" size="96,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
+		<widget source="key_info" render="Label" position="970,666" size="120,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
 		<widget source="key_play" render="Label" position="1116,666" size="160,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
-		<eLabel text="Zurück" position="780,666" size="120,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
-		<ePixmap position="910,664" size="46,28" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/pics/HD/icons/info.png" alphatest="blend" zPosition="1" />
-		<ePixmap position="730,664" size="46,28" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/pics/HD/icons/ok.png" alphatest="blend" zPosition="1" />
+		<eLabel text="Zurück" position="636,666" size="100,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
+		<ePixmap position="920,664" size="46,28" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/pics/HD/icons/info.png" alphatest="blend" zPosition="1" />
+		<ePixmap position="586,664" size="46,28" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/pics/HD/icons/ok.png" alphatest="blend" zPosition="1" />
 		<widget name="play" position="1094,664" size="20,28" alphatest="blend" zPosition="2" />
 		<eLabel position="252,162" size="32,18" zPosition="-1" backgroundColor="#00505050" cornerRadius="2" />
 		<eLabel position="172,162" size="32,18" zPosition="-1" backgroundColor="#00505050" cornerRadius="2" />
@@ -791,6 +793,7 @@ class TVfullscreen(TVscreenHelper, Screen):
 			self[f"typeLabel{index}l"] = StaticText()
 			self[f"typeLabel{index}h"] = StaticText()
 			self[f"typeText{index}"] = StaticText()
+		self["key_red"] = StaticText()
 		self["key_green"] = StaticText("Timer hinzufügen")
 		self["key_yellow"] = StaticText("EPG-Suche")
 		self["key_blue"] = StaticText("Zap" if zapAllowed else "")
@@ -816,7 +819,7 @@ class TVfullscreen(TVscreenHelper, Screen):
 		for widget, iconfile in [("isTopTip", "top.png"), ("isNew", "new.png"), ("isTip", "tip.png"), ("isLive", "live.png"),
 								("hasTimer", "timer.png"), ("isIMDB", "imdb.png"), ("isTMDB", "tmdb.png")]:
 			self[widget].instance.setPixmapFromFile(f"{tvglobals.ICONPATH}{iconfile}")
-		for icon in [("playButton", "playbutton.png")]:
+		for icon in [("play", "play.png"), ("playButton", "playbutton.png")]:
 			iconfile = join(tvglobals.ICONPATH, icon[1])
 			if exists(iconfile):
 				self[icon[0]].instance.setPixmapFromFile(iconfile)
@@ -1129,7 +1132,7 @@ class TVoverview(TVscreenHelper, Screen):
 		<widget source="key_play" render="Label" position="1116,666" size="160,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
 		<eLabel text="Tag -" position="414,666" size="54,26" font="Regular;18" valign="center" halign="right" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
 		<eLabel text="Tag +" position="526,666" size="54,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
-		<eLabel text="Details" position="636,666" size="66,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
+		<eLabel text="Details" position="636,666" size="100,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
 		<ePixmap position="920,664" size="46,28" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/pics/HD/icons/info.png" alphatest="blend" zPosition="1" />
 		<ePixmap position="474,664" size="46,28" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/pics/HD/icons/ch_plus_minus.png" alphatest="blend" zPosition="1" />
 		<ePixmap position="788,664" size="46,28" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/pics/HD/icons/left0right.png" alphatest="blend" zPosition="1" />
