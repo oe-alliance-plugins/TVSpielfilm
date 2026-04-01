@@ -1,0 +1,18 @@
+{
+  "branch": "main",
+  "depends_recipe": "",
+  "description_control": "TV Spielfilm Plugin",
+  "description_recipe": "TVSpielfilm Plugin",
+  "history_source_dir": "TVSpielfilm",
+  "internal_package_name": "enigma2-plugin-extensions-tvspielfilm",
+  "module_dir_name": "TVSpielfilm",
+  "output_subdir": "TVSpielfilm",
+  "package_name": "enigma2-plugin-extensions-tvspielfilm",
+  "plugin_src_rel": "TVSpielfilm",
+  "python_package": "TVSpielfilm",
+  "rdepends_recipe": "python3-yt-dlp",
+  "replaces": "",
+  "repo_name": "TVSpielfilm",
+  "rrecommends": "",
+  "rreplaces": ""
+}
