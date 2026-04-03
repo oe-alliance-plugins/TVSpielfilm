@@ -521,8 +521,8 @@ class TVscreenHelper(TVcoreHelper, Screen):
 	def getPiconFile(self, channelId):
 		def getCleanFileName(value):
 			#   Converts to lowercase, removes non-word characters (alphanumerics and underscores) and converts spaces to hyphens.
-			#	Also strips leading and trailing whitespace. Function is from django
-			#	https://github.com/django/django/blob/9108696a7553123f57c5d42f9c4a90cad44532f4/django/utils/text.py#L417
+			# Also strips leading and trailing whitespace. Function is from django
+			# https://github.com/django/django/blob/9108696a7553123f57c5d42f9c4a90cad44532f4/django/utils/text.py#L417
 			value = normalize('NFKD', value)
 			value = sub("[+]", "plus", value)
 			value = sub("[&]", "and", value)
