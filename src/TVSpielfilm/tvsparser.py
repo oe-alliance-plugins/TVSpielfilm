@@ -428,7 +428,7 @@ tvspassets = TVSparserAssets()
 def main(argv):  # shell interface
 	filename = ""
 	jsonList = []
-	helpstring = "tvsparser v1.0: try 'python Buildstatus.py -h' for more information"
+	helpstring = "tvsparser v1.0: try 'python tvsparser.py -h' for more information"
 	try:
 		opts, args = getopt(argv, "j:anchst", ["json=", "assetslist=", "now", "channellist=", "help", "singleasset=", "tipslist="])
 	except GetoptError as error:
