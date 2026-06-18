@@ -384,7 +384,7 @@ class TVscreenHelper(TVcoreHelper, Screen):
 			suspense = assetDict.get("ratingSuspense")
 			erotic = assetDict.get("ratingErotic")
 			genre = assetDict.get("genre", "")  # e.g. 'Katastrophenaction'
-			programType = dict((v, k) for k, v in tvspassets.catFilters.items()).get(assetDict.get("programType", "AND"), "")  # e.g. 'SP' becomes 'Spielfilm'
+			programType = dict((v, k) for k, v in tvspassets.catFilters.items()).get(assetDict.get("category", "AND"), "")  # e.g. 'SP' for 'Spielfilm'
 			imgUrl = assetDict.get("imgUrl", "")
 			if imgUrl:
 				imgFile = self.convertImageFilename(imgUrl)
@@ -1872,7 +1872,7 @@ class TVmain(TVscreenHelper, Screen):
 				firstYear = tipDict.get("firstYear", "")
 				country = tipDict.get("country", "")
 				countryYear = tipDict.get("countryYear", "")
-				category = tipDict.get("category", "")  # e.g. 'Spielfilm'
+				category = tipDict.get("category", "")  # e.g. for 'Spielfilm'
 				imdbRating = tipDict.get("imdbRating", "")
 				imdbRating = f"IMDb-Wertung: {imdbRating}" if imdbRating else ""
 				fsk = tipDict.get("fsk", "")
@@ -2109,7 +2109,7 @@ class selectChannelCategory(TVscreenHelper, Screen):
 		for channel in self.channelDicts:
 			channelId = channel.get("channelId", "").lower()
 			if channelId in importDict:  # channel was imported?
-				category = channel.get("category", "")
+				category = channel.get("category", "")  # e.g. for 'Spielfilm'
 				if category and category not in categories:  # found category already listed?
 					categories.append(category)
 				usedChannels.append({"channelId": channelId, "category": category})
