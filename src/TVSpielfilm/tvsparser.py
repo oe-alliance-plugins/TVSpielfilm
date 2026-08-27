@@ -55,25 +55,21 @@ class TVSparserHelper:
 				errMsg, htmldata = f"Website access ERROR, response code: {response.raise_for_status()}", ""
 			del response
 			return errMsg, htmldata
-		except exceptions.RequestException as errMsg:
+		except exceptions.RequestException as err:
 			print(f"[{tvspglobals.MODULE_NAME}] ERROR in class 'TVcoreHelper:getHTMLdata': {errMsg}".replace("[__main__] ", ""))
 			return errMsg, htmldata
 
 	def getBinaryData(self, url):
-		errMsg, binary = "", None
 		headers = {"User-Agent": tvspglobals.USERAGENT}
+		err_msg, binary = "", b""
 		try:
 			response = get(url, headers=headers, stream=True, timeout=(3.05, 6))
 			response.raise_for_status()
-			if response.ok:
-				errMsg, binary = "", response.content
-			else:
-				errMsg, binary = f"URL access ERROR, response code: {response.raise_for_status()}", None
-			del response
-			return errMsg, binary
-		except exceptions.RequestException as errMsg:
-			print(f"[{tvspglobals.MODULE_NAME}] ERROR in class 'tvsphelper:getBinaryData': {url} - binary data could not be downloaded: {errMsg}".replace("[__main__] ", ""))
-			return errMsg, binary
+			binary = response.content
+		except exceptions.RequestException as error:
+			err_msg = str(error)
+			print(f"[{tvspglobals.MODULE_NAME}] ERROR in class 'tvsphelper:get_binary_data': {url} - binary data could not be downloaded: {err_msg}".replace("[__main__] ", ""))
+		return err_msg, binary
 
 	def searchOneValue(self, regex, text, fallback, flags=None):
 		text = search(regex, text, flags=flags) if flags else search(regex, text)

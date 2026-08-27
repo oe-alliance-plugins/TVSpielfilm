@@ -224,7 +224,8 @@ class TVcoreHelper:
 				try:
 					with open(assetsFile, "w") as file:
 						dump(allAssets, file)
-				except OSError as errMsg:
+				except OSError as err:
+					errMsg = str(err)
 					print(f"[{tvglobals.MODULE_NAME}] ERROR in class 'TVcoreHelper:saveAllAssets': {errMsg}!")
 		return errMsg
 
@@ -341,7 +342,7 @@ class TVscreenHelper(TVcoreHelper, Screen):
 				errMsg, binary = tvsphelper.getBinaryData(url)
 				if not errMsg:
 					img = Image.open(BytesIO(binary))
-					img.thumbnail((600, 450) if tvglobals.RESOLUTION == "FHD" else (400, 300), Image.LANCZOS)
+					img.thumbnail((600, 450) if tvglobals.RESOLUTION == "FHD" else (400, 300), Image.Resampling.LANCZOS)
 					img.save(imgFile, format="jpeg", quality=25, optimize=True)
 					img.close()
 					if callback:
@@ -357,9 +358,9 @@ class TVscreenHelper(TVcoreHelper, Screen):
 			isNew = assetDict.get("isNew", "")
 			isLive = assetDict.get("isLive", "")
 			timeStartIso = assetDict.get("timeStart", "")
-			self.timeStartDt = datetime.fromisoformat(timeStartIso).replace(tzinfo=None) if timeStartIso else ""
+			self.timeStartDt = datetime.fromisoformat(timeStartIso).replace(tzinfo=None)
 			timeEndIso = assetDict.get("timeEnd", "")
-			timeEndDt = datetime.fromisoformat(timeEndIso).replace(tzinfo=None) if timeEndIso else ""
+			timeEndDt = datetime.fromisoformat(timeEndIso).replace(tzinfo=None)
 			timeStartStr = self.timeStartDt.strftime("%H:%M")
 			timeStartEndStr = f"{timeStartStr} - {timeEndDt.strftime('%H:%M')}"
 			timeStartEndTs = (int(self.timeStartDt.timestamp()), int(timeEndDt.timestamp()))
@@ -2702,7 +2703,7 @@ class TVautoUpdate(TVcoreHelper):
 							if span2200StartsDt:
 								assets2200 += self.cherryPickList(channelAssets, span2200StartsDt, span2200EndsDt)
 						if not TVS_AUTOUPDATESTOP:
-							saveErr = self.saveAllAssets(allAssets, spanStartsDt, timeCode)
+							saveErr, saveErr2200 = self.saveAllAssets(allAssets, spanStartsDt, timeCode), ""
 							if span2200StartsDt:
 								saveErr2200 = self.saveAllAssets(assets2200, span2200StartsDt, timeCode) if assets2200 else ""
 							if saveErr or saveErr2200:
@@ -2711,7 +2712,8 @@ class TVautoUpdate(TVcoreHelper):
 							else:
 								weekday = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"][currDateDt.weekday()] if index else "heute"
 								print(f"[{tvglobals.MODULE_NAME}] Time period successfully in cache: '{spanStartsStr}' | {weekday} (+{index}/+{maxCacheDays} days) for {len(importDict.items())} assets.")
-		except Exception as errMsg:
+		except Exception as err:
+			errMsg = str(err)
 			from traceback import print_exc
 			print(f"[{tvglobals.MODULE_NAME}] Unexpected error: {errMsg}")
 			print_exc()
