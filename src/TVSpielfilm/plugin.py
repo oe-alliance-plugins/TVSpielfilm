@@ -808,6 +808,7 @@ class TVfullscreen(TVscreenHelper, Screen):
 			"play": self.playTrailer,
 			"playpause": self.playTrailer,
 			"info": self.keyInfo,
+			"epg": self.keyInfo,
 			"green": self.keyGreen,
 			"blue": self.zapToCurrent,
 			"yellow": self.openEPGSearch,
@@ -1201,6 +1202,7 @@ class TVoverview(TVscreenHelper, Screen):
 			"previous": self.prevweek,
 			"next": self.nextweek,
 			"info": self.keyInfo,
+			"epg": self.keyInfo,
 			"cancel": self.keyExit
 		}, -1)
 		tvglobals.IMPORTDICT = self.readImportedFile()  # lade importierte Senderdaten
