@@ -224,8 +224,8 @@ class TVcoreHelper:
 				try:
 					with open(assetsFile, "w") as file:
 						dump(allAssets, file)
-				except OSError as err:
-					errMsg = str(err)
+				except OSError as error:
+					errMsg = str(error)
 					print(f"[{tvglobals.MODULE_NAME}] ERROR in class 'TVcoreHelper:saveAllAssets': {errMsg}!")
 		return errMsg
 
@@ -241,7 +241,7 @@ class TVcoreHelper:
 					print(f"[{tvglobals.MODULE_NAME}] ERROR in class 'TVcoreHelper:getSingleAsset': {errMsg}!")
 			else:  # download & save into cache
 				errMsg, assetDict = tvspassets.parseSingleAsset(assetUrl)
-				if not errMsg:
+				if assetDict:
 					assetfile = join(f"{self.getCachePath()}assets/", f"{self.convertAssetId(assetUrl)}.json")
 					if not exists(assetfile):
 						try:
@@ -340,7 +340,7 @@ class TVscreenHelper(TVcoreHelper, Screen):
 		if not exists(imgFile):
 			try:
 				errMsg, binary = tvsphelper.getBinaryData(url)
-				if not errMsg:
+				if binary:
 					img = Image.open(BytesIO(binary))
 					img.thumbnail((600, 450) if tvglobals.RESOLUTION == "FHD" else (400, 300), Image.Resampling.LANCZOS)
 					img.save(imgFile, format="jpeg", quality=25, optimize=True)
@@ -358,9 +358,9 @@ class TVscreenHelper(TVcoreHelper, Screen):
 			isNew = assetDict.get("isNew", "")
 			isLive = assetDict.get("isLive", "")
 			timeStartIso = assetDict.get("timeStart", "")
-			self.timeStartDt = datetime.fromisoformat(timeStartIso).replace(tzinfo=None)
+			self.timeStartDt = datetime.fromisoformat(timeStartIso).replace(tzinfo=None) if timeStartIso else datetime.now(tz=None)
 			timeEndIso = assetDict.get("timeEnd", "")
-			timeEndDt = datetime.fromisoformat(timeEndIso).replace(tzinfo=None)
+			timeEndDt = datetime.fromisoformat(timeEndIso).replace(tzinfo=None) if timeEndIso else datetime.now(tz=None)
 			timeStartStr = self.timeStartDt.strftime("%H:%M")
 			timeStartEndStr = f"{timeStartStr} - {timeEndDt.strftime('%H:%M')}"
 			timeStartEndTs = (int(self.timeStartDt.timestamp()), int(timeEndDt.timestamp()))
@@ -735,10 +735,10 @@ class TVfullscreen(TVscreenHelper, Screen):
 		<widget source="key_green" render="Label" position="160,666" size="96,26" font="Regular;18" valign="center" halign="left" wrap="ellipsis" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
 		<widget source="key_yellow" render="Label" position="266,666" size="96,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
 		<widget source="key_blue" render="Label" position="372,666" size="96,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
-		<widget source="key_info" render="Label" position="970,666" size="120,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
+		<widget source="key_info" render="Label" position="1000,666" size="120,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
 		<widget source="key_play" render="Label" position="1116,666" size="160,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
 		<eLabel text="Zurück" position="636,666" size="100,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
-		<ePixmap position="920,664" size="46,28" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/pics/HD/icons/info.png" alphatest="blend" zPosition="1" />
+		<ePixmap position="920,664" size="76,28" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/pics/HD/icons/info_epg.png" alphatest="blend" zPosition="1" />
 		<ePixmap position="586,664" size="46,28" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/pics/HD/icons/ok.png" alphatest="blend" zPosition="1" />
 		<widget name="play" position="1094,664" size="20,28" alphatest="blend" zPosition="2" />
 		<eLabel position="252,162" size="32,18" zPosition="-1" backgroundColor="#00505050" cornerRadius="2" />
@@ -1128,16 +1128,16 @@ class TVoverview(TVscreenHelper, Screen):
 		<widget source="key_green" render="Label" position="160,666" size="96,26" font="Regular;18" valign="center" halign="left" wrap="ellipsis" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
 		<widget source="key_yellow" render="Label" position="266,666" size="96,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
 		<widget source="key_blue" render="Label" position="372,666" size="96,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
-		<eLabel text="Woche -" position="706,666" size="76,26" font="Regular;18" valign="center" halign="right" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
-		<eLabel text="Woche + " position="838,666" size="76,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
-		<widget source="key_info" render="Label" position="970,666" size="120,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
+		<eLabel text="Woche -" position="696,666" size="76,26" font="Regular;18" valign="center" halign="right" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
+		<eLabel text="Woche + " position="828,666" size="76,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
+		<widget source="key_info" render="Label" position="1000,666" size="120,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
 		<widget source="key_play" render="Label" position="1116,666" size="160,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
 		<eLabel text="Tag -" position="414,666" size="54,26" font="Regular;18" valign="center" halign="right" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
 		<eLabel text="Tag +" position="526,666" size="54,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
 		<eLabel text="Details" position="636,666" size="100,26" font="Regular;18" valign="center" halign="left" foregroundColor="grey" backgroundColor="#16000000" transparent="1" />
-		<ePixmap position="920,664" size="46,28" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/pics/HD/icons/info.png" alphatest="blend" zPosition="1" />
+		<ePixmap position="920,664" size="76,28" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/pics/HD/icons/info_epg.png" alphatest="blend" zPosition="1" />
 		<ePixmap position="474,664" size="46,28" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/pics/HD/icons/ch_plus_minus.png" alphatest="blend" zPosition="1" />
-		<ePixmap position="788,664" size="46,28" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/pics/HD/icons/left0right.png" alphatest="blend" zPosition="1" />
+		<ePixmap position="778,664" size="46,28" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/pics/HD/icons/left0right.png" alphatest="blend" zPosition="1" />
 		<ePixmap position="586,664" size="46,28" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/pics/HD/icons/ok.png" alphatest="blend" zPosition="1" />
 		<widget name="play" position="1094,664" size="20,28" alphatest="blend" zPosition="2" />
 		<eLabel position="936,306" size="318,22" zPosition="-1" backgroundColor="#505050" cornerRadius="2" />
@@ -2712,8 +2712,8 @@ class TVautoUpdate(TVcoreHelper):
 							else:
 								weekday = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"][currDateDt.weekday()] if index else "heute"
 								print(f"[{tvglobals.MODULE_NAME}] Time period successfully in cache: '{spanStartsStr}' | {weekday} (+{index}/+{maxCacheDays} days) for {len(importDict.items())} assets.")
-		except Exception as err:
-			errMsg = str(err)
+		except Exception as error:
+			errMsg = str(error)
 			from traceback import print_exc
 			print(f"[{tvglobals.MODULE_NAME}] Unexpected error: {errMsg}")
 			print_exc()
