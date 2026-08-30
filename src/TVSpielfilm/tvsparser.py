@@ -43,32 +43,30 @@ tvspglobals = TVSparserGlobals()
 
 class TVSparserHelper:
 	def getHTMLdata(self, url, params=None, timeout=(3.05, 6)):
-		errMsg, htmldata = "", ""
+		err_msg, htmldata = "", ""
 		headers = {"User-Agent": tvspglobals.USERAGENT}
 		try:
-			if not headers:
-				headers = {}
-			response = get(url, params=params, headers=headers, timeout=timeout)
-			if response.ok:
-				errMsg, htmldata = "", response.text
-			else:
-				errMsg, htmldata = f"Website access ERROR, response code: {response.raise_for_status()}", ""
-			del response
-			return errMsg, htmldata
-		except exceptions.RequestException as err:
-			print(f"[{tvspglobals.MODULE_NAME}] ERROR in class 'TVcoreHelper:getHTMLdata': {errMsg}".replace("[__main__] ", ""))
-			return errMsg, htmldata
-
-	def getBinaryData(self, url):
-		headers = {"User-Agent": tvspglobals.USERAGENT}
-		err_msg, binary = "", b""
-		try:
-			response = get(url, headers=headers, stream=True, timeout=(3.05, 6))
-			response.raise_for_status()
-			binary = response.content
+			with get(url, params=params, headers=headers, timeout=timeout) as response:
+				if response.ok:
+					htmldata = response.text
+				else:
+					err_msg = f"Website access ERROR, HTTP status code: {response.status_code}"
 		except exceptions.RequestException as error:
 			err_msg = str(error)
-			print(f"[{tvspglobals.MODULE_NAME}] ERROR in class 'tvsphelper:get_binary_data': {url} - binary data could not be downloaded: {err_msg}".replace("[__main__] ", ""))
+		return err_msg, htmldata
+
+	def getBinaryData(self, url, timeout=(3.05, 6)):
+		err_msg, binary = "", None
+		headers = {"User-Agent": tvspglobals.USERAGENT}
+		try:
+			with get(url, headers=headers, stream=True, timeout=timeout) as response:
+				if response.ok:
+					binary = response.content
+				else:
+					err_msg = f"URL access ERROR, HTTP status code: {response.status_code}"
+		except exceptions.RequestException as error:
+			err_msg = str(error)
+			print(f"[{tvspglobals.MODULE_NAME}] ERROR in class 'tvsphelper:getBinaryData': {url} - binary data could not be downloaded: {err_msg}".replace("[__main__] ", ""))
 		return err_msg, binary
 
 	def searchOneValue(self, regex, text, fallback, flags=None):
