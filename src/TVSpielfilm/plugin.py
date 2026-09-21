@@ -2746,8 +2746,9 @@ def showCurrentProgram(session, **kwargs):
 	if assetUrl:
 		callInThread(session.open, TVfullscreen, assetUrl, datetime.now())
 	else:
-		sRef = session.nav.getCurrentlyPlayingServiceReference().toString()
-		sName = ServiceReference(sRef).getServiceName()
+		sRef = session.nav.getCurrentlyPlayingServiceReference()
+		sRef = sRef.toString() if sRef else ""
+		sName = ServiceReference(sRef).getServiceName() if sRef else "{unbekannt}"
 		session.open(MessageBox, f"Sender '{sName}' wird vom TV Spielfilm Server nicht unterstützt.", type=MessageBox.TYPE_INFO, timeout=2, close_on_any_key=True)
 
 
