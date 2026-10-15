@@ -641,7 +641,7 @@ class TVscreenHelper(TVcoreHelper, Screen):
 	def openEPGSearch(self):
 		if isPluginInstalled("EPGSearch"):
 			from Plugins.Extensions.EPGSearch.EPGSearch import EPGSearch
-			self.session.open(EPGSearch, self.assetTitle, False)
+			self.session.open(EPGSearch, self.assetTitle, False, "all")
 		else:
 			self.session.open(MessageBox, "Das Plugin 'EPGSearch' wurde nicht gefunden. Es muss zuerst installiert werden.", type=MessageBox.TYPE_WARNING, timeout=5)
 

@@ -87,7 +87,7 @@ class TVSparserTips:
 		extract = htmldata[htmldata.find('<div class="swiper-wrapper tips-teaser-container ">'):]
 		extract = extract[:extract.find('class="recommendations-box clear">')]
 		tipsDicts = []
-		for entry in findall('<a href=(.*?)</a>', extract, S):
+		for entry in findall("<a href=(.*?)</a>", extract, S):
 			entry = f"<a href={entry}</a>"  # add search patterns
 			tipId = tvsphelper.searchOneValue(r'data-id="BC(.*?)"', entry, "")
 			if tipId:
@@ -96,13 +96,13 @@ class TVSparserTips:
 				category = tvsphelper.searchOneValue(r'<span class="tips-teaser__top__category">(.*?)</span>', entry, "")  # e.g. 'SP' for 'Spielfilm'
 				intro = tvsphelper.searchOneValue(r'<div class="tips-teaser__bottom__intro">(.*?)</div>', entry, "")  # e.g. 'heute | 20:15 | ZDF'
 				intros = intro.split(" | ") or []
-				timeStartTs, hourmin = None, datetime.strptime(intros[1], '%H:%M').time() if len(intros) > 1 else None
+				timeStartTs, hourmin = None, datetime.strptime(intros[1], "%H:%M").time() if len(intros) > 1 else None
 				nowDt = datetime.now(tz=None)
 				if hourmin and intros:
 					if "heute" in intros[0]:
 						timeStartTs = int(datetime.combine(nowDt, hourmin).timestamp())
 					else:
-						timeStartTs = int(datetime.combine(datetime.strptime(f"{intros[0]}{nowDt.year}", '%d.%m.%Y'), hourmin).timestamp())
+						timeStartTs = int(datetime.combine(datetime.strptime(f"{intros[0]}{nowDt.year}", "%d.%m.%Y"), hourmin).timestamp())
 				channelName = intros[2] if len(intros) > 2 else ""
 				timeInfos = intros[0] or ""
 				timeInfos += f" | {intros[1]} Uhr" if len(intros) > 1 else ""
@@ -113,7 +113,7 @@ class TVSparserTips:
 				new = tvsphelper.searchOneValue(r'<div class=\"tips-teaser__bottom__new-text\">(.*?)</div>', entry, "").lower()
 				isNew = True if "neu" in new else False
 				imgUrl = tvsphelper.searchOneValue(r'<img src="(.*?)" width', entry, "")
-				channelId = tvsphelper.searchOneValue(r'<picture>\s*<img src=.*/(.*?).png', entry, "", flags=S).lower()
+				channelId = tvsphelper.searchOneValue(r"<picture>\s*<img src=.*/(.*?).png", entry, "", flags=S).lower()
 				assetUrl = tvsphelper.searchOneValue(r'<a href="(.*)"', entry, "")
 				# not supported/used for the moment: timeEndTs, countryYear, titleLength, imdbRating, fskText, conclusion, fsk
 				tipsDicts.append({"tipId": tipId, "channelName": channelName, "channelId": channelId, "timeStart": timeStartTs,
@@ -140,10 +140,10 @@ class TVSparserChannels:
 			print(f"[{tvspglobals.MODULE_NAME}] ERROR in class 'TVSparserChannels:parseChannelList': {errMsg}".replace("[__main__] ", ""))
 			return []
 		extract = htmldata[htmldata.find('<div class="my-channels">'):]
-		extract = extract[:extract.find('</div>')]
+		extract = extract[:extract.find("</div>")]
 		channelDicts = []
 		for catSet in findall(r'<h2 class="headline headline--section"(.*?)</ul>', extract, flags=S):
-			category = search(r'>(.*?)</h2>', catSet)
+			category = search(r">(.*?)</h2>", catSet)
 			category = unescape(category.group(1)) if category else ""  # e.g. ['Hauptsender', 'Auslandssender', 'Spartensender', 'News und Dokus', 'Dritte Programme', 'Sportsender', 'Kindersender', 'Musiksender', 'Shopping', 'Regionalsender', 'Sky Cinema', 'Pay TV', 'Sky Sport', 'Sky Entertainment']
 			regex = '/tv-programm/sendungen/(.*?).html"'
 			channellist = findall(compile(regex), catSet)
@@ -244,9 +244,9 @@ class TVSparserAssets:
 				setAssetKey("timeEnd", f"{datetime.fromtimestamp(timeEndTs).isoformat()}+00:00")
 				setAssetKey("assetUrl", tvsphelper.searchOneValue(r'<div class="image-text-holder">\s*<a href="(.*?)"', entry, "", flags=S).replace("https://m.", "https://"))
 				assetsDicts.append(assetDict)
-			if finish or extract.find('<span>Weitere Sendungen</span>') == -1:
+			if finish or extract.find("<span>Weitere Sendungen</span>") == -1:
 				break
-			dataAjax = tvsphelper.searchOneValue(r'data-ajax=.*?offset=(.*?)&amp', extract, "", flags=S)
+			dataAjax = tvsphelper.searchOneValue(r"data-ajax=.*?offset=(.*?)&amp", extract, "", flags=S)
 			if dataAjax and dataAjax.isdigit():
 				offset = int(dataAjax)
 			else:  # fallback
@@ -307,16 +307,16 @@ class TVSparserAssets:
 		conclusion = unescape(conclusion.replace("<p>", "").replace("</p>", "").strip())
 		stage = tvsphelper.searchOneValue(r'<span class="stage-underline gray">(.*?)</span>', extract, "", flags=S).split(" | ")
 		timeStartEnd = stage[1].split(" - ") if len(stage) > 1 else ""
-		timeStartTs, startHourmin = None, datetime.strptime(timeStartEnd[0].replace(" Uhr", ""), '%H:%M').time() if timeStartEnd else None
-		timeEndTs, endHourmin = None, datetime.strptime(timeStartEnd[1].replace(" Uhr", ""), '%H:%M').time() if len(timeStartEnd) > 1 else None
+		timeStartTs, startHourmin = None, datetime.strptime(timeStartEnd[0].replace(" Uhr", ""), "%H:%M").time() if timeStartEnd else None
+		timeEndTs, endHourmin = None, datetime.strptime(timeStartEnd[1].replace(" Uhr", ""), "%H:%M").time() if len(timeStartEnd) > 1 else None
 		nowDt = datetime.now(tz=None)
 		if "heute" in stage[0].lower():
 			timeStartTs = int(datetime.combine(nowDt, startHourmin).timestamp()) if startHourmin else ""
 			timeEndTs = int(datetime.combine(nowDt, endHourmin).timestamp()) if endHourmin else ""
 		else:
 			daydate = stage[0][stage[0].find(",") + 2:]  # convert 'Fr., 23.05.' -> '23.05.'
-			timeStartTs = int(datetime.combine(datetime.strptime(f"{daydate}{nowDt.year}", '%d.%m.%Y'), startHourmin).timestamp()) if startHourmin else ""
-			timeEndTs = int(datetime.combine(datetime.strptime(f"{daydate}{nowDt.year}", '%d.%m.%Y'), endHourmin).timestamp()) if endHourmin else ""
+			timeStartTs = int(datetime.combine(datetime.strptime(f"{daydate}{nowDt.year}", "%d.%m.%Y"), startHourmin).timestamp()) if startHourmin else ""
+			timeEndTs = int(datetime.combine(datetime.strptime(f"{daydate}{nowDt.year}", "%d.%m.%Y"), endHourmin).timestamp()) if endHourmin else ""
 		channelName = stage[2] if len(stage) > 2 else ""
 		channelId = tvsphelper.searchOneValue(r'"pageElementCreative":"(.*?)"', extract, "").upper().replace("N\\/A", "").lower()
 		imgUrl = tvsphelper.searchOneValue(r'<picture class=".*?">\s*<img src="(.*?)" width', extract, "", flags=S)
@@ -332,14 +332,14 @@ class TVSparserAssets:
 		trailerData = f"{cid},{lic}" if cid and lic else ""
 		descblock = tvsphelper.searchOneValue(r'<section class="broadcast-detail__description">(.*?)</section>', extract, "", flags=S)
 		preview = tvsphelper.searchOneValue(r'<p class="headline">(.*?)</p>', descblock, "")
-		text = unescape(tvsphelper.searchOneValue(r'<p>(.*?)</p>', descblock, "")).replace("<br/>", "\n").replace('&amp;', '&')
+		text = unescape(tvsphelper.searchOneValue(r"<p>(.*?)</p>", descblock, "")).replace("<br/>", "\n").replace("&amp;", "&")
 		infoblock = tvsphelper.searchOneValue(r'<p class="headline">Infos</p>(.*?)<p class="headline headline--spacing">', extract, "", flags=S)
-		infodict = dict(findall(r'<dt>(.*?)</dt>\s*<dd>(.*?)</dd>', infoblock, flags=S))
+		infodict = dict(findall(r"<dt>(.*?)</dt>\s*<dd>(.*?)</dd>", infoblock, flags=S))
 		country, firstyear, length = infodict.get("Land", ""), infodict.get("Jahr", ""), infodict.get("Länge", "")
 		fsk = infodict.get("FSK", "-1")[:2]
 		fsk = int(fsk) if fsk.isdigit() else -1
 		crewblock = tvsphelper.searchOneValue(r'<p class="headline headline--spacing">Crew</p>(.*?)</div>', extract, "", flags=S)
-		crewblock = findall(r'<dt>(.*?)</dt>\s*<dd>\s*(.*?)\s*</dd>', crewblock, flags=S)
+		crewblock = findall(r"<dt>(.*?)</dt>\s*<dd>\s*(.*?)\s*</dd>", crewblock, flags=S)
 		crewdict = {}
 		crewdict["crew"] = {}
 		for crew in crewblock:
@@ -351,7 +351,7 @@ class TVSparserAssets:
 			namelist.append(name)
 			crewdict["crew"][role] = namelist
 		castblock = tvsphelper.searchOneValue(r'<p class="headline">Cast</p>(.*?)</dl>', extract, "", flags=S)
-		castblock = findall(r'<dt>(.*?)</dt>\s*<dd>\s*(.*?)\s*</dd>', castblock, flags=S)
+		castblock = findall(r"<dt>(.*?)</dt>\s*<dd>\s*(.*?)\s*</dd>", castblock, flags=S)
 		castdict = {}
 		castdict["cast"] = {}
 		for cast in castblock:
