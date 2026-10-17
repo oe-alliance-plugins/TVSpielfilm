@@ -24,7 +24,7 @@ from sys import exit, argv
 
 class TVSparserGlobals:
 	MODULE_NAME = __name__.split(".")[-1]
-	WEBURL = bytes.fromhex("687474703a2f2f7777772e7476737069656c66696c6d2e64653"[:-1]).decode()
+	WEBURL = bytes.fromhex("68747470733a2f2f7777772e7476737069656c66696c6d2e64653"[:-1]).decode()
 	MWEBURL = bytes.fromhex("68747470733a2f2f6d2e7476737069656c66696c6d2e64653"[:-1]).decode()
 	USERAGENT = choice([
 			"Mozilla/5.0 (Windows NT 11.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0",
