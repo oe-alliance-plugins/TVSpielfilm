@@ -246,7 +246,7 @@ class TVCoreHelper(tvglobals):
 
 	def image_filename(self, img_url):
 		name, ext = splitext(img_url[img_url.find(".de") + 3:img_url.rfind("?im")])
-		filename = f"{md5(name.encode()).hexdigest()}{ext}"
+		filename = f"{md5(name.encode()).hexdigest()}{ext}"  # NOSONAR
 		cache_path = f"{self.get_cache_path()}/images/{filename[0]}"  # e.g. '/media/hdd/TVSpielfilm/images/a'
 		return join(cache_path, filename.replace('.jpeg', '.jpg')) if img_url else ""
 
@@ -256,7 +256,7 @@ class TVCoreHelper(tvglobals):
 	def single_asset_filename(self, asset_url):
 		filename = ""
 		if asset_url:
-			hash = md5(asset_url.encode()).hexdigest()
+			hash = md5(asset_url.encode()).hexdigest()  # NOSONAR
 			cache_path = f"{self.get_cache_path()}/assets"  # e.g. '/media/hdd/TVSpielfilm/assets'
 			filename = join(f"{cache_path}/{hash[0]}", f"{hash}.json")  # e.g. '/media/.../5/533..A.json'
 		return filename
@@ -426,7 +426,7 @@ class TVCoreHelper(tvglobals):
 			if isfile(self.MAPFILE) and (config.plugins.tvspielfilm.update_mapfile.value and int(getmtime(sourcefile)) > int(getmtime(self.MAPFILE))):  # plugin mapfile older than user mapfile:
 				hashcode = ""
 				with open(self.MAPFILE, "rb") as file:
-					hashcode = md5(file.read()).hexdigest()
+					hashcode = md5(file.read()).hexdigest()  # NOSONAR
 				if hashcode != config.plugins.tvspielfilm.mapfilehash.value:  # has the content of the mapfile changed?
 					print(f"[{self.MODULE_NAME}] Copy '{sourcefile}' to '{self.MAPFILE}'.")
 					copy(sourcefile, self.MAPFILE)
