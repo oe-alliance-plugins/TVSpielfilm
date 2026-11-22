@@ -100,11 +100,14 @@ class TVSparserHelper:
 	def get_binary_data(self, url, timeout=(3.05, 6)):
 		err_msg, binary = "", None
 		try:
-			code, body = self.request(url, timeout=timeout)
-			if 200 <= code < 300:
-				binary = body
-			else:
-				err_msg = f"URL access ERROR, HTTP status code: {code}"
+			response = get(url, headers={"User-Agent": tvspglobals.USERAGENT}, timeout=timeout)
+			try:
+				if 200 <= response.status_code < 300:
+					binary = response.content
+				else:
+					err_msg = f"URL access ERROR, HTTP status code: {response.status_code}"
+			finally:
+				response.close()
 		except Exception as error:
 			err_msg = str(error)
 			print(f"[{tvspglobals.MODULE_NAME}] ERROR in class 'tvsphelper:get_binary_data': {url} - binary data could not be downloaded: {err_msg}".replace("[__main__] ", ""))
