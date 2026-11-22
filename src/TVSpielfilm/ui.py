@@ -551,7 +551,7 @@ class TVMagazine(TVScreenHelper, Screen):
 				"fonts": [gFont("Regular",18), gFont("Regular",16)],
 				"itemHeight":110
 				}
-			</convert>                                                                                  
+			</convert>
 		</widget>
 		<widget source="menulist3" render="Listbox" position="640,210" size="208,440" itemCornerRadiusSelected="10" itemGradientSelected="#101093,#203060,#0027153c,vertical" enableWrapAround="1" foregroundColorSelected="white" backgroundColor="#16000000" transparent="1" scrollbarMode="showNever" scrollbarBorderWidth="1" scrollbarWidth="10" scrollbarBorderColor="blue" scrollbarForegroundColor="#203060">
 			<convert type="TemplatedMultiContent">
