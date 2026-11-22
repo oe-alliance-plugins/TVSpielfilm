@@ -1,84 +1,39 @@
+# TVSpielfilm für OpenATV / Enigma2
 
+TVSpielfilm ist eine elektronische Programmzeitschrift für Enigma2.
 
-# <p align="center">TVSpielfilm Plugin for Enigma2 (E²) ![GitHub repo size](https://img.shields.io/github/repo-size/oe-alliance-plugins/TVSpielfilm.svg)</p>
+- **TV-Magazin und flexible Zeiträume:** Sendungen lassen sich im Magazin oder in Übersichten für „Jetzt im TV“, die Primetime und selbst konfigurierte Zeiträume anzeigen. Zeiträume A bis E können jeweils aktiviert und mit Startzeit und Dauer eingestellt werden.
+- **Senderübersicht nach Kategorien:** Importierte Sender sind in Kategorien abrufbar. Beim Import werden Enigma2-Bouquets den TVSpielfilm-Sendern zugeordnet; die Zuordnungsregeln können geprüft und aktualisiert werden.
+- **Erweiterte Sendungsdetails:** Detailseiten zeigen unter anderem Beschreibung, Besetzung und Crew, FSK, Sender, Laufzeit, Bewertungen und Kennzeichnungen wie Tipp, Neu oder Live. IMDb- und TMDb-Suche sowie verfügbare Trailerinformationen werden unterstützt.
+- **Tipps des Tages:** Die Tipps können beim Pluginstart oder fortlaufend eingeblendet werden. Bilder und Tippdaten werden lokal zwischengespeichert.
+- **Steuerbares EPG-Update:** Das manuelle Update kann fehlende Daten ergänzen oder vorhandene Daten für heute beziehungsweise vollständig erneuern. Beim Ergänzen werden bereits vorhandene Senderdaten übersprungen. Ein automatisches Update lässt sich über die Aufgabenplanung des Images starten und abbrechen.
+- **Konfigurierbarer Cache:** Cache-Pfad, Anzahl vorausgeladener zukünftiger Tage und Aufbewahrungsdauer alter Daten sind einstellbar. Veraltete Cache-Dateien werden bereinigt; bei Bedarf kann der Cache im Plugin gelöscht werden.
+- **Begrenztes Vorabladen von Details:** Sendungsdetails und Bilder können parallel geladen werden. Die Zahl gleichzeitiger Detail-Downloads ist einstellbar oder abschaltbar.
+- **Mehr Anzeigeoptionen:** Sendernamen können vom Image oder vom TVSpielfilm-Server stammen. Picon-Quelle, Menüeinträge, Tipps und Datenbank-Präferenz für Detailinformationen lassen sich konfigurieren.
 
-**TV Spielfilm Plugin**
+## Bedienung
 
+Im Hauptmenü stehen TV-Magazin, konfigurierte Zeiträume, „Jetzt im TV“, die laufende Sendung, die Senderübersicht sowie EPG-Update und Cache-Löschen zur Verfügung. Sendungen können aus den Übersichten oder der Detailansicht direkt als Enigma2-Timer angelegt werden. Bereits vorhandene Timer werden in den Übersichten und Details gekennzeichnet.
 
-## Github status
-[![Build](https://github.com/oe-alliance-plugins/TVSpielfilm/actions/workflows/buildbot.yml/badge.svg)](https://github.com/oe-alliance-plugins/TVSpielfilm/actions/workflows/buildbot.yml)
-[![Lint Status](https://github.com/oe-alliance-plugins/TVSpielfilm/actions/workflows/pylint.yml/badge.svg)](https://github.com/oe-alliance-plugins/TVSpielfilm/actions/workflows/pylint.yml)
-[![Ruff Status](https://github.com/oe-alliance-plugins/TVSpielfilm/actions/workflows/ruff.yml/badge.svg)](https://github.com/oe-alliance-plugins/TVSpielfilm/actions/workflows/ruff.yml)
-[![Build Status](https://github.com/oe-alliance-plugins/TVSpielfilm/actions/workflows/compile.yml/badge.svg)](https://github.com/oe-alliance-plugins/TVSpielfilm/actions/workflows/compile.yml)
-[![AUTOTAG](https://github.com/oe-alliance-plugins/TVSpielfilm/actions/workflows/autotag.yml/badge.svg)](https://github.com/oe-alliance-plugins/TVSpielfilm/actions/workflows/autotag.yml)
+Der Senderimport muss vor dem ersten EPG-Update eingerichtet werden. Nach einem Import empfiehlt sich ein Update, damit die Programmdaten für die ausgewählten Sender geladen werden.
 
+## Einstellungen
 
-[![Plugin Version](https://img.shields.io/github/v/tag/oe-alliance-plugins/TVSpielfilm?label=Latest%20Version&color=darkviolet)](https://github.com/oe-alliance-plugins/TVSpielfilm/tags)
-[![Latest Release](https://img.shields.io/github/release-date/oe-alliance-plugins/TVSpielfilm?label=From&color=darkviolet)](https://github.com/oe-alliance-plugins/TVSpielfilm/releases/latest)
-[![Github last commit](https://img.shields.io/github/last-commit/oe-alliance-plugins/TVSpielfilm)](https://github.com/oe-alliance-plugins/TVSpielfilm)
-[![GitHub Activity](https://img.shields.io/github/commit-activity/y/oe-alliance-plugins/TVSpielfilm.svg?label=commits)](https://github.com/oe-alliance-plugins/TVSpielfilm/commits)
-[![GitHub Activity](https://img.shields.io/github/commit-activity/m/oe-alliance-plugins/TVSpielfilm.svg?label=commits)](https://github.com/oe-alliance-plugins/TVSpielfilm/commits)
+Die Plugin-Einstellungen sind über die Menütaste im Plugin erreichbar. Im Expertenmodus stehen zusätzlich unter anderem folgende Optionen bereit:
 
-## SonarCloud status
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oe-alliance-plugins_TVSpielfilm&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oe-alliance-plugins_TVSpielfilm)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=oe-alliance-plugins_TVSpielfilm&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=oe-alliance-plugins_TVSpielfilm)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=oe-alliance-plugins_TVSpielfilm&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=oe-alliance-plugins_TVSpielfilm)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=oe-alliance-plugins_TVSpielfilm&metric=bugs)](https://sonarcloud.io/summary/new_code?id=oe-alliance-plugins_TVSpielfilm)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=oe-alliance-plugins_TVSpielfilm&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=oe-alliance-plugins_TVSpielfilm)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=oe-alliance-plugins_TVSpielfilm&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=oe-alliance-plugins_TVSpielfilm)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=oe-alliance-plugins_TVSpielfilm&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=oe-alliance-plugins_TVSpielfilm)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=oe-alliance-plugins_TVSpielfilm&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=oe-alliance-plugins_TVSpielfilm)
+| Bereich | Optionen |
+| --- | --- |
+| Daten | Cache-Pfad, zukünftige Cache-Tage, Aufbewahrung alter Daten |
+| Update | Verhalten beim Aktualisieren vorhandener Daten, automatische Aktualisierung |
+| Vorabladen | Parallele Sendungsdetails-Downloads: aus, 2, 4 oder 8 |
+| Zeiträume | A bis E aktivieren sowie Startzeit und Dauer festlegen |
+| Anzeige | Sendernamen, Picons, Tipps und Menüeinträge konfigurieren |
+| Details | IMDb- oder TMDb-Suche bevorzugen |
 
-[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=oe-alliance-plugins_TVSpielfilm)
+## Voraussetzungen
 
----
+- Enigma2-Receiver mit OpenATV oder kompatiblem Image
+- Netzwerkzugriff auf den TVSpielfilm-Dienst für aktuelle EPG- und Detaildaten
+- Ein dauerhaft verfügbarer Speicherort für den Cache wird empfohlen
 
-### 📜 License Information [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-
-This is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation
-
-This plugin is released under GPLv3. See [LICENSE](https://www.gnu.org/licenses/gpl-3.0.html#license-text) for full details.
-
-<img width="120" height="58" alt="GPLv3_Logo svg" src="https://github.com/user-attachments/assets/67d32b0a-2a44-4fa9-a972-202daf28808e" />
-
----
-
-### 🤝 Contributing & Contact
-
-TVSpielfilm is created by users for users and we welcome every contribution. There are no highly paid developers. There are only users who have seen a problem and done their best to fix it. This means TVSpielfilm will always need the contributions of users like you. How can you get involved?
-
-For questions or feedback, feel free and please open an issue or contribute with a Pull Request!
-
-Pull requests are very welcome for:
-- **Coding:** Developers can help by fixing a bug, adding new features, Integration improvements, Feature enhancements
-- **Localization:** Translate into your native language.
-- **Helping users:** Our support process relies on enthusiastic contributors like you to help others.
-
-Your contribution is very welcome! Follow these steps:
-
-1. 🍴 Fork this repository
-2. 🔄 Create a branch for your feature
-3. 💻 Make your changes
-4. ✅ Commit using conventional messages
-5. 📤 Push to your branch
-6. 🔍 Open a Pull Request
-
-Enjoy and help us improve it today. :)
-
-### 🚨 Disclaimer
-
-The project author is not responsible for how this software is used by others. It is not intended to be used for accessing or distributing copyrighted materials without authorization.
-Users are solely responsible for determining the legality of their actions.
-
-This repository has no control over the streams, links, or the legality of the content provided by the different hosts (including all mirror sites). It is the end user's responsibility to ensure the legal use of these streams, and we strongly recommend verifying that the content complies with all applicable laws, including copyright laws and regulations of your countrys jurisdiction before use.
-
----
-
-### 🤝 Contributing Details
-
-For detailed contributing guidelines including testing procedures and AI policy, please see [CONTRIBUTING.md](https://github.com/oe-alliance-plugins/.github/blob/main/docs/CONTRIBUTING.md).
-
----
-
-⭐️ If you find this plugin useful, please give it a star on GitHub!
-Thanks! ❤️ 💞 💖 ❤️‍🔥 💗
+Beim Pluginstart wird der Zugriff auf TVSpielfilm und den Bildserver geprüft. Ist der Zugriff nicht möglich, erscheint eine Fehlermeldung und die Menüpunkte bleiben gesperrt. Prüfen Sie in diesem Fall die Internetverbindung und gegebenenfalls den VPN-Server.
