@@ -174,7 +174,7 @@ class TVCoreHelper(tvglobals):
 			return err_msg, False
 		return "", outdated
 
-	def get_user_timespans(self):
+	def get_user_timespans(self):  # active timespans, e.g. timespans = [(('20:15', 'prime'), 105), (('22:00', '22'), 120), (('00:00', '0'), 120)]
 		userconfigs = [
 			(config.plugins.tvspielfilm.starttime_a.value, config.plugins.tvspielfilm.durance_a.value),
 			(config.plugins.tvspielfilm.starttime_b.value, config.plugins.tvspielfilm.durance_b.value),

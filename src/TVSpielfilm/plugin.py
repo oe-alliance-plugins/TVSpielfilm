@@ -19,8 +19,7 @@ from ServiceReference import ServiceReference
 from Screens.MessageBox import MessageBox
 
 # PLUGIN IMPORTS
-from .tvglobals import STARTTIMES, tvglobals
-
+from .tvglobals import tvglobals
 
 def start_epg_autoupdate(timer_entry):
 	from .tvautoupdate import tvautoupdate
@@ -55,9 +54,14 @@ def show_nowontv(session, **kwargs):
 
 
 def show_primetime(session, **kwargs):
+	from .tvcorehelper import tvcorehelper
 	from .ui import TVImport, TVOverview
 	if isfile(tvglobals.IMPORTFILE):
-		session.open(TVOverview, (STARTTIMES[config.plugins.tvspielfilm.starttime_b.value], config.plugins.tvspielfilm.durance_b.value))
+		starting, duration = next(((starting, duration) for starting, duration in tvcorehelper.get_user_timespans() if starting[0] == "20:15"), (None, None))
+		if starting and duration:
+			session.open(TVOverview, (starting, duration))
+		else:
+			session.open(MessageBox, "Es wurde kein aktivierter Zeitraum '20:15' in den TVS-Usersettings gefunden.\nBitte im TVS-Setup einen Zeitraum mit '20:15' belegen und aktivieren.", type=MessageBox.TYPE_INFO, timeout=2, close_on_any_key=True)
 	else:
 		session.open(TVImport)
 
@@ -93,14 +97,20 @@ def Plugins(**kwargs):
 	if primetime & 1:
 		pd_list.append(PluginDescriptor(name="TV Spielfilm - Primetime 20:15", where=PluginDescriptor.WHERE_EXTENSIONSMENU, fnc=show_primetime))
 	if primetime & 2:
-		pd_list.append(PluginDescriptor(name="TV Spielfilm - Primetime 20:15", icon=f"pics/{tvglobals.RESOLUTION}/logos/TV2015.png", description="Zeige die laufenden und nachfolgenden Sendungen der Primetime 20:15 Uhr", where=PluginDescriptor.WHERE_PLUGINMENU, fnc=show_primetime))
+		pd_list.append(
+			PluginDescriptor(name="TV Spielfilm - Primetime 20:15", icon=f"pics/{tvglobals.RESOLUTION}/logos/TV2015.png",
+			description="Zeige die laufenden und nachfolgenden Sendungen der Primetime 20:15 Uhr", where=PluginDescriptor.WHERE_PLUGINMENU, fnc=show_primetime)
+        )
 	if not primetime and hasattr(PluginDescriptor, 'WHERE_BUTTONSETUP'):
 		pd_list.append(PluginDescriptor(name="TV Spielfilm - Primetime 20:15", where=PluginDescriptor.WHERE_BUTTONSETUP, fnc=show_primetime))
 	nowontv = config.plugins.tvspielfilm.nowontv.value
 	if nowontv & 1:
 		pd_list.append(PluginDescriptor(name="TV Spielfilm - Jetzt im TV", where=PluginDescriptor.WHERE_EXTENSIONSMENU, fnc=show_nowontv))
 	if nowontv & 2:
-		pd_list.append(PluginDescriptor(name="TV Spielfilm - Jetzt im TV", icon=f"pics/{tvglobals.RESOLUTION}/logos/TVjetzt.png", description="Zeige die aktuell laufenden und demnächst anstehenden Sendungen", where=PluginDescriptor.WHERE_PLUGINMENU, fnc=show_nowontv))
+		pd_list.append(
+			PluginDescriptor(name="TV Spielfilm - Jetzt im TV", icon=f"pics/{tvglobals.RESOLUTION}/logos/TVjetzt.png",
+			description="Zeige die aktuell laufenden und demnächst anstehenden Sendungen", where=PluginDescriptor.WHERE_PLUGINMENU, fnc=show_nowontv)
+		)
 	if not nowontv and hasattr(PluginDescriptor, 'WHERE_BUTTONSETUP'):
 		pd_list.append(PluginDescriptor(name="TV Spielfilm - Jetzt im TV", where=PluginDescriptor.WHERE_BUTTONSETUP, fnc=show_nowontv))
 	if config.plugins.tvspielfilm.currprogram.value == 1:
