@@ -1983,7 +1983,11 @@ class TVOverview(TVScreenHelper, Screen):
 				if timeend_dt:
 					durance = timeend_dt - timestart_dt
 					progress = int(((now_dt - timestart_dt) / durance) * 100) if durance else -1
-				asset_in_span = timestart_dt >= span_starts_dt and timestart_dt < span_ends_dt
+				if self.time_code == "now":
+					before_starts_dt = span_starts_dt - timedelta(minutes=300)  # to also show long-running programs, the evaluation starts 5 hours before
+					asset_in_span = timestart_dt >= before_starts_dt and timestart_dt < span_ends_dt and timeend_dt > span_starts_dt
+				else:
+					asset_in_span = timestart_dt >= span_starts_dt and timestart_dt < span_ends_dt
 				if self.single_channel_id or channel_id in import_dict and asset_in_span:  # channel has been imported and starts within the time span
 					asset_url = asset.get("asset_url", "")
 					category = asset.get("category", "")  # e.g. 'SP' for 'Spielfilm'

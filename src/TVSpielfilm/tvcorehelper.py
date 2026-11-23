@@ -218,9 +218,6 @@ class TVCoreHelper(tvglobals):
 			if curr_date_dt.hour < 5:  # if now is between 00:00h and 00500h, scan yesterday
 				span_starts_dt -= timedelta(days=1)  # start scan yesterday 05:00h
 			span_ends_dt = span_starts_dt + timedelta(days=1)
-		elif time_code == "now":  # to also show long-running programs, the evaluation starts 5 hours before
-			span_starts_dt = curr_date_dt - timedelta(minutes=300)
-			span_ends_dt = curr_date_dt + timedelta(minutes=spandurance_ts)
 		else:  # user time spans
 			span_starts_dt = curr_date_dt.replace(hour=int(hour), minute=int(minute), second=0, microsecond=0)
 			span_ends_dt = span_starts_dt + timedelta(minutes=spandurance_ts)

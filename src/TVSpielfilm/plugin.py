@@ -101,7 +101,7 @@ def Plugins(**kwargs):
 		pd_list.append(
 			PluginDescriptor(name="TV Spielfilm - Primetime 20:15", icon=f"pics/{tvglobals.RESOLUTION}/logos/TV2015.png",
 			description="Zeige die laufenden und nachfolgenden Sendungen der Primetime 20:15 Uhr", where=PluginDescriptor.WHERE_PLUGINMENU, fnc=show_primetime)
-        )
+		)
 	if not primetime and hasattr(PluginDescriptor, 'WHERE_BUTTONSETUP'):
 		pd_list.append(PluginDescriptor(name="TV Spielfilm - Primetime 20:15", where=PluginDescriptor.WHERE_BUTTONSETUP, fnc=show_primetime))
 	nowontv = config.plugins.tvspielfilm.nowontv.value
