@@ -21,6 +21,7 @@ from Screens.MessageBox import MessageBox
 # PLUGIN IMPORTS
 from .tvglobals import tvglobals
 
+
 def start_epg_autoupdate(timer_entry):
 	from .tvautoupdate import tvautoupdate
 	return tvautoupdate.autoupdate_epg(timer_entry)
