@@ -4,13 +4,13 @@
 # everything must be in lower case #
 ####################################
 skyspl: sky.*?premier league.*?,
+skych: sky.?blockbuster.?,
 skych: sky.*?highlights.*?,
 servusa: servus.*?österreich.*?,
 sky-n: sky.*?classics.*?,
 spo-d: sportdigital fussball.*?,
 rnf: rhein-neckar.*?,
 cin: sky.*?premiere.*?,
-cin: sky.*?blockbuster.*?
 sky-f: sky.*?family.*?,
 sky-f: sky.*?feelgood.*?,
 sky-a: sky.*?action.*?,
